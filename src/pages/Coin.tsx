@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Link,
   Outlet,
@@ -7,6 +7,7 @@ import {
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoinInfo, fetchPriceData } from "../api";
 
 interface RouteState {
   name: string;
@@ -77,26 +78,16 @@ interface PriceData {
 function Coin() {
   const { coinId } = useParams<{ coinId: string }>();
   const { state } = useLocation() as CoinState;
-  const [loading, setLoading] = useState(true);
-  const [info, setInfoData] = useState<InfoData>();
-  const [price, setPriceData] = useState<PriceData>();
+  const { isLoading: infoLoading, data: info } = useQuery<InfoData>(
+    ["getCoinInfo", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: priceLoading, data: price } = useQuery<PriceData>(
+    ["getCoinPrice", coinId],
+    () => fetchPriceData(coinId)
+  );
   const priceRouteMatch = useMatch(`${coinId}/price`);
-
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-
-      setInfoData(infoData);
-      setPriceData(priceData);
-      setLoading(false);
-    })();
-  }, [coinId]);
+  const loading = infoLoading || priceLoading;
 
   return (
     <Container>
