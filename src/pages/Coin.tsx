@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 import {
   Link,
   Outlet,
@@ -81,13 +82,19 @@ function Coin() {
   );
   const { isLoading: priceLoading, data: price } = useQuery<PriceData>(
     ["getCoinPrice", coinId],
-    () => fetchPriceData(coinId)
+    () => fetchPriceData(coinId),
+    { refetchInterval: 5000 }
   );
   const priceRouteMatch = useMatch(`${coinId}/price`);
   const loading = infoLoading || priceLoading;
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : info?.name}
