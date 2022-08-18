@@ -17,3 +17,11 @@ export const fetchPriceData = async (coinId?: string) => {
 
   return response.json();
 };
+
+export const fetchChartData = async (coinId?: string) => {
+  const response = await fetch(
+    `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
+  );
+
+  return response.json();
+};
