@@ -7,11 +7,8 @@ import {
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
-import { fetchCoinInfo, fetchPriceData } from "../api";
 
-interface RouteState {
-  name: string;
-}
+import { fetchCoinInfo, fetchPriceData } from "../api";
 
 interface CoinState {
   state: {
@@ -110,8 +107,8 @@ function Coin() {
               <span>${info?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>${price?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{info?.description}</Description>

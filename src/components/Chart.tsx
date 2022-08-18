@@ -17,8 +17,10 @@ interface IChartData {
 
 function Chart() {
   const { coinId } = useOutletContext<{ coinId: string }>();
-  const { isLoading, data } = useQuery<IChartData[]>(["getChart", coinId], () =>
-    fetchChartData(coinId)
+  const { isLoading, data } = useQuery<IChartData[]>(
+    ["getChart", coinId],
+    () => fetchChartData(coinId),
+    { refetchInterval: 10000 }
   );
 
   return (
